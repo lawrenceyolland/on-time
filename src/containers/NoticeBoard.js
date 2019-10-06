@@ -1,14 +1,20 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import SelectLines from "../components/SelectLines";
 
 class NoticeBoard extends Component {
   state = {
-    lines: []
+    modeName: ["tube", "dlr", "overground"]
   };
 
-  fetchTravelData = () => {
+  fetchTravelModeData = () => {
+    const modes = this.state.modeName.join();
     return fetch(
-      `https://api.tfl.gov.uk/Line/Mode/tube?app_id=${process.env.REACT_APP_ID}&app_key=${process.env.REACT_APP_KEYS}`
+      `https://api.tfl.gov.uk/Line/Mode/${modes}?app_id=${process.env.REACT_APP_ID}&app_key=${process.env.REACT_APP_KEYS}`
     ).then(resp => resp.json());
+  };
+
+  parseStatus = () => {
+    this.fetchTravelModeData().then(mode => mode.map(m => console.log(m.name)));
   };
 
   addLine = line => {
@@ -18,10 +24,15 @@ class NoticeBoard extends Component {
   };
 
   render() {
-    return <div>
-
-
-    </div>;
+    this.parseStatus();
+    return (
+      <Fragment>
+        <div>hellooooooo</div>
+        <div>
+          <SelectLines />
+        </div>
+      </Fragment>
+    );
   }
 }
 
