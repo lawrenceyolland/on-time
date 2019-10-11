@@ -3,8 +3,22 @@ import SelectLines from "../components/SelectLines";
 
 class NoticeBoard extends Component {
   state = {
-    modeName: ["tube", "dlr", "overground"]
+    modeName: ["tube"],
+    lineStatus: []
   };
+
+  componentDidMount() {
+    console.log("app mounted 🤓");
+    this.fetchTravelModeData().then(line =>
+      line.forEach(l =>
+        this.setState({
+          lineStatus: {
+            [l.name]: l.status.length > 0 ? true : false
+          }
+        })
+      )
+    );
+  }
 
   fetchTravelModeData = () => {
     const modes = this.state.modeName.join();
@@ -13,24 +27,11 @@ class NoticeBoard extends Component {
     ).then(resp => resp.json());
   };
 
-  parseStatus = () => {
-    this.fetchTravelModeData().then(mode => mode.map(m => console.log(m.name)));
-  };
-
-  addLine = line => {
-    this.setState({
-      lines: [...this.state.lines, line]
-    });
-  };
-
   render() {
-    this.parseStatus();
     return (
       <Fragment>
-        <div>hellooooooo</div>
-        <div>
-          <SelectLines />
-        </div>
+        <div></div>
+        <div><SelectLines addLine={this.props.addLine} /></div>
       </Fragment>
     );
   }
